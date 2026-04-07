@@ -1,6 +1,6 @@
 # UpSoundTest
 
-Небольшой, но Telegram-бота на `aiogram` для реального проекта.  
+Небольшой, но аккуратный Telegram-бот на `aiogram` для реального проекта.  
 Бот умеет принимать ссылку на трек Яндекс Музыки и возвращать базовую информацию: название, исполнителя и длительность.
 
 ---
@@ -35,6 +35,7 @@
 - [aiogram 3](https://docs.aiogram.dev/)
 - [python-dotenv](https://pypi.org/project/python-dotenv/)
 - [yandex-music](https://github.com/MarshalX/yandex-music-api)
+- [aiohttp-socks](https://pypi.org/project/aiohttp-socks/)
 - стандартный `logging`
 
 ---
@@ -130,6 +131,7 @@ https://music.yandex.ru/album/123456/track/789012
 BOT_TOKEN=your_telegram_bot_token_here
 LOG_LEVEL=INFO
 PROXY_URL=
+YANDEX_PROXY_URL=
 YANDEX_MUSIC_TOKEN=
 ```
 
@@ -137,9 +139,10 @@ YANDEX_MUSIC_TOKEN=
 - `BOT_TOKEN` — токен Telegram-бота от BotFather (обязательно).
 - `LOG_LEVEL` — уровень логов (`DEBUG`, `INFO`, `WARNING`, `ERROR`).
 - `PROXY_URL` — прокси **только для Telegram** (aiogram-сессия).
+- `YANDEX_PROXY_URL` — отдельный прокси **только для запросов к API Яндекс Музыки**.
 - `YANDEX_MUSIC_TOKEN` — опциональный OAuth-токен Яндекс Музыки (fallback для некоторых API-сценариев).
 
-Важно: внешние API-запросы (включая `yandex-music`) сейчас выполняются **без** `PROXY_URL`.
+Важно: `PROXY_URL` и `YANDEX_PROXY_URL` работают раздельно и не пересекаются.
 
 ---
 
