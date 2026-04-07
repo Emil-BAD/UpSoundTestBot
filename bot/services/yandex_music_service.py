@@ -73,10 +73,11 @@ class YandexMusicService:
 
     def _get_client(self) -> ClientAsync:
         if self._client is None:
-            # Прокси Telegram (PROXY_URL) сюда не передаём — запросы к API Яндекса идут напрямую.
-            request = Request()
+            settings = get_settings()
+            # Отдельный прокси для API Яндекс Музыки.
+            request = Request(proxy_url=settings.yandex_proxy_url)
             self._client = ClientAsync(
-                token=get_settings().yandex_music_token,
+                token=settings.yandex_music_token,
                 request=request,
                 language="ru",
             )
