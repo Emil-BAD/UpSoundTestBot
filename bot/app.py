@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from urllib.parse import urlparse
 
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
@@ -26,15 +27,27 @@ def create_dispatcher() -> Dispatcher:
     return dp
 
 
+def create_telegram_session(proxy_url: str | None) -> AiohttpSession:
+    """Create Telegram session with safe fallback to direct mode."""
+    if not proxy_url:
+        return AiohttpSession()
+
+    parsed = urlparse(proxy_url)
+    if parsed.scheme not in {"http", "https", "socks5", "socks5h"}:
+        logging.getLogger(__name__).warning(
+            "Invalid PROXY_URL scheme '%s'. Telegram will run without proxy.",
+            parsed.scheme or "empty",
+        )
+        return AiohttpSession()
+
+    return AiohttpSession(proxy=proxy_url)
+
+
 async def start() -> None:
     setup_logging()
     settings = get_settings()
 
-    session = (
-        AiohttpSession(proxy=settings.telegram_proxy_url)
-        if settings.telegram_proxy_url
-        else AiohttpSession()
-    )
+    session = create_telegram_session(settings.telegram_proxy_url)
     bot = Bot(
         token=settings.bot_token,
         session=session,
