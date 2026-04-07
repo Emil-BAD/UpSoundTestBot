@@ -1,0 +1,4 @@
+aiogram>=3.7.0
+python-dotenv>=1.0.1
+yandex-music>=2.2.0
+aiohttp-socks>=0.10.1
